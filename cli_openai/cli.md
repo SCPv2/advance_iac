@@ -18,7 +18,7 @@ Samsung Cloud Platform v2 CLI를 이용해서 VPC 내에 Virtual Server 만들�
 
     - 작업 폴더에 scp-cli.exe 를 이동하고 이름을 scpcli.exe로 변경
     - 환경변수 PATH에 작업 폴더 경로를 등록한 후 Windows 재부팅 
-    - config 파일 정의(인증키 정보 입력 필요)
+    - cli-config.json 파일 생성(인증키 정보 입력 필요)
 
 ```cmd
 cd %USERPROFILE%
@@ -36,21 +36,19 @@ echo }
 
 ## VPC 생성
 
-VPC(Virtual Private Cloud)를 먼저 생성합니다.
+VPC 생성
 
 ```powershell
 scpcli vpc vpc create --name "VPC1" --cidr "10.1.0.0/16"
 ```
 
-VPC 정보를 조회합니다.
+VPC 조회
 
 ```powershell
 scpcli vpc vpc list --name "VPC1"
 ```
 
 ## Internet Gateway 및 Firewall 생성
-
-VPC에 Firewall이 활성화된 Internet Gateway를 연결합니다.
 
 VPC ID를 직접 입력해서 생성
 
@@ -64,7 +62,7 @@ VPC ID를 조회해서 생성
 $vpcId = (scpcli vpc vpc list --name VPC1 -f json | ConvertFrom-Json).id; scpcli vpc internet-gateway create --vpc_id $vpcId --type "IGW" --firewall_enabled "true"
 ```
 
-Internet Gateway와 Firewall 정보를 조회합니다.
+Internet Gateway와 Firewall 정보 조회
 
 ```powershell
 scpcli vpc internet-gateway list
@@ -73,7 +71,6 @@ scpcli firewall firewall list
 
 ## 서브넷 생성
 
-지정한 VPC에 서브넷 생성
 
 VPC ID를 직접 입력해서 생성
 
@@ -115,29 +112,27 @@ Security Group ID를 조회해서 생성
 $publicIp = "여기에 사용하고 있는 PC의 Public IP 입력"; $sgId = (scpcli security-group security-group list --name bastionSG -f json | ConvertFrom-Json).id; scpcli security-group security-group-rule create --security_group_id $sgId --direction "ingress" --protocol "tcp" --port_range_min "3389" --port_range_max "3389" --remote_ip_prefix $publicIp
 ```
 
-## Virtual Server 생성 준비
+## Virtual Server 생성
 
-Virtual Server를 만드는데 사용할 서버 이미지 리스트를 조회합니다.
+서버 이미지 목록 조회
 
 ```powershell
 scpcli virtualserver image list > vmimage.txt
 ```
 
-Virtual Server를 만드는데 사용할 서버 타입 리스트를 조회합니다.
+서버 타입 목록 조회
 
 ```powershell
 scpcli virtualserver server type list > servertype.txt
 ```
 
-Virtual Server를 만드는데 사용할 Public IP를 생성
+Virtual Server에 연결할 Public IP를 생성
 
 ```powershell
 scpcli vpc public-ip create --type "IGW"
 ```
 
-## Virtual Server 생성
-
-Windows Server Virtual Server를 생성합니다.
+Virtual Server 생성
 
 ```powershell
 scpcli virtualserver server create --name "vm110w" --image_id "28d98f66-44ca-4858-904f-636d4f674a62" --server_type_id "s1v1m2" --networks '{"subnet_id": "cca94df9c0fd46f4b2c75ec69a5c0a36"}' --security_groups "f7e6f9e1-dfac-4e14-ab43-eba9e10f8d48" --keypair_name "my-windows-key"
@@ -145,9 +140,7 @@ scpcli virtualserver server create --name "vm110w" --image_id "28d98f66-44ca-485
 
 ## Internet Gateway Firewall 규칙 추가
 
-Internet Gateway의 Firewall 규칙 추가
-
-직접 ID를 입력하여 생성
+직접 설정값을 입력하여 생성
 
 ```powershell
 scpcli firewall firewall-rule create --source_address "여기에 사용하고 있는 PC의 Public IP 입력" --service '{"service_type": "TCP", "service_value": "3389"}' --direction "ingress" --destination_address "여기에 Virtual Server의 IP 입력" --action "Allow" --firewall_id = "여기에 IGW Firewall ID 입력"
