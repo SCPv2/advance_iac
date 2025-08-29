@@ -1,6 +1,7 @@
 # Samsung Cloud Platform v2 Terraform 101 실습 교재
 
 ## 📋 목차
+
 - [실습 환경 준비](#실습-환경-준비)
 - [Terraform 기초 개념](#terraform-기초-개념)
 - [Samsung Cloud Platform v2 Provider 설정](#samsung-cloud-platform-v2-provider-설정)
@@ -18,12 +19,14 @@
 ## 🚀 실습 환경 준비
 
 ### 사전 요구사항
+
 - **Terraform 설치**: v1.11 이상
 - **Samsung Cloud Platform v2 계정** 및 API 인증키
 - **Key Pair** 생성 완료
 - **텍스트 에디터**: VS Code, Vim 등
 
 ### Terraform 설치 확인
+
 ```bash
 # Terraform 버전 확인
 terraform version
@@ -34,6 +37,7 @@ terraform version
 ```
 
 ### 작업 디렉토리 준비
+
 ```bash
 # 실습 디렉토리로 이동
 cd D:\scpv2\advance_iac\terraform
@@ -58,8 +62,9 @@ ls -la
 ## 📚 Terraform 기초 개념
 
 ### Infrastructure as Code (IaC)란?
+
 - **정의**: 인프라를 코드로 정의하고 관리하는 방법론
-- **장점**: 
+- **장점**:
   - 버전 관리 가능
   - 반복 가능한 배포
   - 협업 및 리뷰 프로세스
@@ -68,6 +73,7 @@ ls -la
 ### Terraform 핵심 개념
 
 #### 1. **Provider (프로바이더)**
+
 클라우드 서비스와의 연결을 담당하는 플러그인
 
 ```hcl
@@ -87,6 +93,7 @@ provider "samsungcloudplatformv2" {
 ```
 
 #### 2. **Resource (리소스)**
+
 생성하고 관리할 인프라 구성요소
 
 ```hcl
@@ -103,6 +110,7 @@ resource "samsungcloudplatformv2_vpc_vpc" "vpc1" {
 ```
 
 #### 3. **Variable (변수)**
+
 재사용 가능한 값 정의
 
 ```hcl
@@ -125,6 +133,7 @@ variable "vpc_cidr" {
 ```
 
 #### 4. **Output (출력)**
+
 생성된 리소스 정보 노출
 
 ```hcl
@@ -144,6 +153,7 @@ output "vpc_cidr" {
 ## 🔧 Samsung Cloud Platform v2 Provider 설정
 
 ### 인증 설정
+
 Samsung Cloud Platform v2 API 사용을 위한 인증 정보 설정
 
 ```bash
@@ -159,6 +169,7 @@ set SCP_REGION=kr-west-1
 ```
 
 ### Provider 버전 고정
+
 ```hcl
 terraform {
   required_providers {
@@ -176,11 +187,13 @@ terraform {
 ## 📝 실습 1: VPC 생성
 
 ### 학습 목표
+
 - VPC 리소스 생성 방법 이해
 - 변수 사용법 습득
 - Terraform 기본 워크플로우 실습
 
 ### VPC 모듈 구조 분석
+
 ```
 modules/vpc/
 ├── main.tf       # 리소스 정의
@@ -189,6 +202,7 @@ modules/vpc/
 ```
 
 ### 📄 `modules/vpc/main.tf` 분석
+
 ```hcl
 # Terraform 버전 및 Provider 요구사항
 terraform {
@@ -215,6 +229,7 @@ resource "samsungcloudplatformv2_vpc_vpc" "vpc1" {
 ```
 
 ### 📄 `modules/vpc/variables.tf` 분석
+
 ```hcl
 variable "name" {
   type        = string
@@ -241,6 +256,7 @@ variable "description" {
 ```
 
 ### 📄 `modules/vpc/outputs.tf` 생성
+
 ```hcl
 output "vpc_id" {
   value       = samsungcloudplatformv2_vpc_vpc.vpc1.id
@@ -259,6 +275,7 @@ output "vpc_name" {
 ```
 
 ### 실습 명령어
+
 ```bash
 # 1. Terraform 초기화
 terraform init
@@ -278,13 +295,15 @@ terraform output
 ## 🌐 실습 2: Subnet과 Internet Gateway 구성
 
 ### 학습 목표
+
 - 네트워크 구성 요소 간의 관계 이해
 - 의존성(dependency) 설정 방법 학습
-- 서브넷과 인터넷 게이트웨이 생성
+- Subnet과 Internet Gateway 생성
 
 ### Internet Gateway 모듈 분석
 
 #### 📄 `modules/internet_gateway/main.tf`
+
 ```hcl
 terraform {
   required_providers {
@@ -305,6 +324,7 @@ resource "samsungcloudplatformv2_vpc_internet_gateway" "IGW_vpc1" {
 ```
 
 #### 📄 `modules/internet_gateway/variables.tf`
+
 ```hcl
 variable "vpc_id" {
   type        = string
@@ -327,6 +347,7 @@ variable "description" {
 ### Subnet 모듈 분석
 
 #### 📄 `modules/subnet/main.tf`
+
 ```hcl
 terraform {
   required_providers {
@@ -360,6 +381,7 @@ resource "samsungcloudplatformv2_vpc_subnet" "subnet02" {
 ### 메인 모듈에서의 의존성 설정
 
 #### 📄 `main.tf`에서 모듈 호출
+
 ```hcl
 # VPC 모듈
 module "vpc" {
@@ -381,6 +403,7 @@ module "subnet" {
 ```
 
 ### 실습 명령어
+
 ```bash
 # 1. Internet Gateway 생성
 terraform plan -target=module.internet_gateway
@@ -399,16 +422,19 @@ terraform show | grep -E "(vpc|subnet|gateway)"
 ## 🔒 실습 3: Security Group 설정
 
 ### 학습 목표
+
 - Security Group과 규칙 설정 방법
 - 보안 모범 사례 적용
 - 네트워크 접근 제어 구성
 
 ### Security Group 구조
+
 - **Bastion Host**: 관리용 서버 (RDP/SSH 접근)
 - **Application**: 웹/앱 서버용 보안 그룹
 - **Database**: 데이터베이스 서버용 보안 그룹
 
 ### 📄 `modules/security_group/main.tf` 분석
+
 ```hcl
 terraform {
   required_providers {
@@ -480,6 +506,7 @@ resource "samsungcloudplatformv2_security_group_security_group_rule" "allow_http
 ### Security Group 규칙 설계 원칙
 
 #### 1. **최소 권한 원칙 (Principle of Least Privilege)**
+
 ```hcl
 # ❌ 잘못된 예: 모든 트래픽 허용
 remote_ip_prefix = "0.0.0.0/0"
@@ -489,6 +516,7 @@ remote_ip_prefix = var.admin_ip  # 예: "203.0.113.1/32"
 ```
 
 #### 2. **명확한 설명 추가**
+
 ```hcl
 resource "samsungcloudplatformv2_security_group_security_group_rule" "web_to_db" {
   security_group_id = samsungcloudplatformv2_security_group_security_group.db_sg.id
@@ -502,6 +530,7 @@ resource "samsungcloudplatformv2_security_group_security_group_rule" "web_to_db"
 ```
 
 ### 실습 명령어
+
 ```bash
 # 1. Security Group 계획 확인
 terraform plan -target=module.security_group
@@ -518,6 +547,7 @@ terraform state show module.security_group.samsungcloudplatformv2_security_group
 ## 💻 실습 4: Virtual Server 배포
 
 ### 학습 목표
+
 - 가상 서버 생성 방법
 - 키 페어와 이미지 설정
 - 네트워크 인터페이스 구성
@@ -525,6 +555,7 @@ terraform state show module.security_group.samsungcloudplatformv2_security_group
 ### Virtual Server 구성 요소
 
 #### 1. **Key Pair 설정**
+
 ```hcl
 resource "samsungcloudplatformv2_virtualserver_keypair" "keypair" {
   name = var.name_keypair
@@ -532,6 +563,7 @@ resource "samsungcloudplatformv2_virtualserver_keypair" "keypair" {
 ```
 
 #### 2. **포트 기반 IP 설정**
+
 ```hcl
 resource "samsungcloudplatformv2_vpc_port" "vm_port" {
   name             = "vm111r-port"
@@ -543,6 +575,7 @@ resource "samsungcloudplatformv2_vpc_port" "vm_port" {
 ```
 
 #### 3. **Virtual Server 생성**
+
 ```hcl
 resource "samsungcloudplatformv2_virtualserver_server" "server_001" {
   name           = var.name_vm      # vm111r
@@ -576,6 +609,7 @@ resource "samsungcloudplatformv2_virtualserver_server" "server_001" {
 ### 이미지 및 서버 타입 조회
 
 #### Data Source를 사용한 동적 조회
+
 ```hcl
 # Rocky Linux 이미지 조회
 data "samsungcloudplatformv2_virtualserver_images" "rocky" {
@@ -601,6 +635,7 @@ resource "samsungcloudplatformv2_virtualserver_server" "server_001" {
 ```
 
 ### 실습 명령어
+
 ```bash
 # 1. 사용 가능한 이미지 확인 (Terraform 콘솔 사용)
 terraform console
@@ -623,6 +658,7 @@ terraform output
 ### 기본 워크플로우
 
 #### 1. **초기화 (Initialize)**
+
 ```bash
 # 프로바이더 다운로드 및 설정
 terraform init
@@ -637,6 +673,7 @@ terraform init
 ```
 
 #### 2. **계획 수립 (Plan)**
+
 ```bash
 # 전체 리소스 계획 확인
 terraform plan
@@ -652,6 +689,7 @@ terraform plan -var-file="prod.tfvars"
 ```
 
 #### 3. **적용 (Apply)**
+
 ```bash
 # 대화형 승인 모드
 terraform apply
@@ -667,6 +705,7 @@ terraform apply -target=module.vpc
 ```
 
 #### 4. **상태 확인 (Show/State)**
+
 ```bash
 # 현재 상태 전체 보기
 terraform show
@@ -685,6 +724,7 @@ terraform output vpc_id
 ```
 
 #### 5. **검증 (Validate/Format)**
+
 ```bash
 # 설정 파일 문법 검증
 terraform validate
@@ -697,6 +737,7 @@ terraform fmt -recursive
 ```
 
 #### 6. **제거 (Destroy)**
+
 ```bash
 # 전체 리소스 제거 계획
 terraform plan -destroy
@@ -711,6 +752,7 @@ terraform destroy -target=module.virtual_server
 ### 고급 명령어
 
 #### 7. **콘솔 (Console)**
+
 ```bash
 # Terraform 콘솔 시작
 terraform console
@@ -723,6 +765,7 @@ terraform console
 ```
 
 #### 8. **그래프 (Graph)**
+
 ```bash
 # 의존성 그래프 생성
 terraform graph | dot -Tpng > graph.png
@@ -733,6 +776,7 @@ terraform graph > graph.dot
 ```
 
 #### 9. **가져오기 (Import)**
+
 ```bash
 # 기존 리소스를 Terraform 상태로 가져오기
 terraform import module.vpc.samsungcloudplatformv2_vpc_vpc.vpc1 vpc-12345678
@@ -745,9 +789,11 @@ terraform import module.vpc.samsungcloudplatformv2_vpc_vpc.vpc1 vpc-12345678
 ## 📁 모듈 구조 이해
 
 ### 모듈이란?
+
 Terraform 모듈은 재사용 가능한 Terraform 설정의 모음입니다.
 
 ### 권장 모듈 구조
+
 ```
 modules/
 ├── vpc/
@@ -763,6 +809,7 @@ modules/
 ### 모듈 설계 원칙
 
 #### 1. **단일 책임 원칙**
+
 ```hcl
 # ✅ 좋은 예: VPC만 담당하는 모듈
 module "vpc" {
@@ -779,6 +826,7 @@ module "everything" {
 ```
 
 #### 2. **명확한 인터페이스**
+
 ```hcl
 # 📄 modules/vpc/variables.tf
 variable "name" {
@@ -803,6 +851,7 @@ variable "cidr" {
 ```
 
 #### 3. **유용한 출력값**
+
 ```hcl
 # 📄 modules/vpc/outputs.tf
 output "vpc_id" {
@@ -825,6 +874,7 @@ output "database_password" {
 ### 모듈 버전 관리
 
 #### Git 태그를 사용한 버전 관리
+
 ```hcl
 module "vpc" {
   source = "git::https://github.com/your-org/terraform-modules.git//vpc?ref=v1.0.0"
@@ -841,11 +891,13 @@ module "vpc" {
 ### 자주 발생하는 오류와 해결법
 
 #### 1. **인증 오류**
+
 ```
 Error: Failed to authenticate with Samsung Cloud Platform v2
 ```
 
 **해결 방법:**
+
 ```bash
 # 환경 변수 확인
 echo $SCP_ACCESS_KEY
@@ -859,11 +911,13 @@ export SCP_REGION="kr-west-1"
 ```
 
 #### 2. **리소스 종속성 오류**
+
 ```
 Error: resource depends on resource that cannot be determined until apply
 ```
 
 **해결 방법:**
+
 ```hcl
 # 명시적 depends_on 사용
 resource "samsungcloudplatformv2_vpc_subnet" "subnet01" {
@@ -876,11 +930,13 @@ resource "samsungcloudplatformv2_vpc_subnet" "subnet01" {
 ```
 
 #### 3. **상태 파일 잠금 오류**
+
 ```
 Error: Error locking state: Error acquiring the state lock
 ```
 
 **해결 방법:**
+
 ```bash
 # 강제 잠금 해제 (주의!)
 terraform force-unlock <LOCK_ID>
@@ -889,11 +945,13 @@ terraform force-unlock <LOCK_ID>
 ```
 
 #### 4. **이미지 또는 서버 타입을 찾을 수 없는 오류**
+
 ```
 Error: Image not found or Server type not available
 ```
 
 **해결 방법:**
+
 ```hcl
 # 데이터 소스로 동적 조회
 data "samsungcloudplatformv2_virtualserver_images" "available" {
@@ -915,6 +973,7 @@ locals {
 ### 디버깅 도구
 
 #### 1. **로그 레벨 설정**
+
 ```bash
 # 상세 로그 출력
 export TF_LOG=DEBUG
@@ -927,6 +986,7 @@ terraform apply
 ```
 
 #### 2. **상태 파일 분석**
+
 ```bash
 # 상태 파일의 구조 확인
 terraform show -json > state.json
@@ -940,6 +1000,7 @@ terraform state show module.vpc.samsungcloudplatformv2_vpc_vpc.vpc1
 ## ✅ Best Practices
 
 ### 1. **프로젝트 구조**
+
 ```
 terraform-project/
 ├── main.tf                 # 메인 설정
@@ -960,6 +1021,7 @@ terraform-project/
 ```
 
 ### 2. **네이밍 컨벤션**
+
 ```hcl
 # 리소스 네이밍: <service>_<type>_<name>
 resource "samsungcloudplatformv2_vpc_vpc" "main_vpc" { }
@@ -973,6 +1035,7 @@ variable "server_instance_type" { }
 ```
 
 ### 3. **보안 모범 사례**
+
 ```hcl
 # ✅ 민감한 정보는 변수로 분리
 variable "db_password" {
@@ -991,6 +1054,7 @@ resource "samsungcloudplatformv2_security_group_security_group_rule" "ssh_access
 ```
 
 ### 4. **상태 파일 관리**
+
 ```hcl
 # 원격 백엔드 사용 (권장)
 terraform {
@@ -1003,6 +1067,7 @@ terraform {
 ```
 
 ### 5. **코드 품질**
+
 ```bash
 # 자동화된 검증
 terraform fmt -check -recursive
@@ -1016,6 +1081,7 @@ checkov                  # 보안 및 모범 사례 검사
 ```
 
 ### 6. **변수 검증**
+
 ```hcl
 variable "environment" {
   type        = string
@@ -1048,6 +1114,7 @@ variable "vpc_cidr" {
 ## 🎯 실습 과제
 
 ### 과제 1: 기본 인프라 구성 (초급)
+
 1. VPC (10.2.0.0/16) 생성
 2. Public Subnet (10.2.1.0/24) 생성
 3. Internet Gateway 연결
@@ -1055,6 +1122,7 @@ variable "vpc_cidr" {
 5. Rocky Linux 서버 1대 생성 (IP: 10.2.1.100)
 
 ### 과제 2: 다중 계층 아키텍처 (중급)
+
 1. 3-tier 네트워크 구성
    - Web Subnet: 10.3.1.0/24
    - App Subnet: 10.3.2.0/24  
@@ -1064,6 +1132,7 @@ variable "vpc_cidr" {
 4. 적절한 네트워크 ACL 설정
 
 ### 과제 3: 모듈화 및 재사용 (고급)
+
 1. 재사용 가능한 모듈 생성
 2. 환경별(dev/prod) 변수 파일 구성
 3. 원격 상태 백엔드 설정
@@ -1074,14 +1143,17 @@ variable "vpc_cidr" {
 ## 📚 추가 학습 자료
 
 ### 공식 문서
+
 - [Terraform 공식 문서](https://www.terraform.io/docs)
 - [Samsung Cloud Platform v2 Provider 문서](https://registry.terraform.io/providers/SamsungSDSCloud/samsungcloudplatformv2/latest/docs)
 
 ### 학습 리소스
+
 - [Terraform 튜토리얼](https://learn.hashicorp.com/terraform)
 - [Infrastructure as Code 모범 사례](https://www.terraform.io/docs/cloud/guides/recommended-practices/index.html)
 
 ### 커뮤니티
+
 - [Terraform GitHub](https://github.com/hashicorp/terraform)
 - [Terraform Community](https://discuss.hashicorp.com/c/terraform-core/27)
 
