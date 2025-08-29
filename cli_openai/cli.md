@@ -27,8 +27,8 @@ cd ./scp
 (
 echo {
 echo     "auth_url": "https://iam.e.samsungsdscloud.com/v1/endpoints",
-echo     "access_key": "여기에 인증키 access-key 입력",
-echo     "access_secret_key": "여기에 인증키 access-secret-key 입력",
+echo     "access_key": "인증키 access-key 입력",
+echo     "access_secret_key": "인증키 access-secret-key 입력",
 echo     "default_scp_region": "kr-west1"
 echo }
 ) > cli-config.json
@@ -53,7 +53,7 @@ scpcli vpc vpc list --name "VPC1"
 VPC ID를 직접 입력해서 생성
 
 ```powershell
-scpcli vpc internet-gateway create --vpc_id "여기에 앞에서 조회한 VPC ID 입력" --type "IGW" --firewall_enabled "true"
+scpcli vpc internet-gateway create --vpc_id "앞서 만든 VPC ID 입력" --type "IGW" --firewall_enabled "true"
 ```
 
 VPC ID를 조회해서 생성
@@ -74,7 +74,7 @@ scpcli firewall firewall list
 VPC ID를 직접 입력해서 생성
 
 ```powershell
-scpcli vpc subnet create --name "Subnet" --vpc_id "여기에 VPC ID 입력" --cidr "10.1.1.0/24" --type "GENERAL"
+scpcli vpc subnet create --name "Subnet" --vpc_id "앞서 만든 VPC ID 입력" --cidr "10.1.1.0/24" --type "GENERAL"
 ```
 
 VPC ID를 조회해서 생성
@@ -102,13 +102,13 @@ Security Group에 규칙 추가
 직접 Security Group ID를 입력해서 생성
 
 ```powershell
-scpcli security-group security-group-rule create --security_group_id "여기에 Security Group ID 입력" --direction "ingress" --protocol "tcp" --port_range_min "3389" --port_range_max "3389" --remote_ip_prefix "여기에 사용하고 있는 PC의 Public IP 입력"
+scpcli security-group security-group-rule create --security_group_id "앞서 만든 Security Group ID 입력" --direction "ingress" --protocol "tcp" --port_range_min "3389" --port_range_max "3389" --remote_ip_prefix "사용하고 있는 PC의 Public IP 입력"
 ```
 
 Security Group ID를 조회해서 생성
 
 ```powershell
-$publicIp = "182.215.17.173"; $sgId = (scpcli security-group security-group list --name bastionSG -f json | ConvertFrom-Json).id; scpcli security-group security-group-rule create --security_group_id $sgId --direction "ingress" --protocol "tcp" --port_range_min "3389" --port_range_max "3389" --remote_ip_prefix $publicIp
+$publicIp = "사용하고 있는 PC의 Public IP 주소 입력"; $sgId = (scpcli security-group security-group list --name bastionSG -f json | ConvertFrom-Json).id; scpcli security-group security-group-rule create --security_group_id $sgId --direction "ingress" --protocol "tcp" --port_range_min "3389" --port_range_max "3389" --remote_ip_prefix $publicIp
 ```
 
 ## Virtual Server 생성
@@ -134,7 +134,7 @@ scpcli vpc public-ip create --type "IGW"
 - Virtual Server 생성
 
 ```powershell
-scpcli virtualserver server create --name "vm110w" --image_id "28d98f66-44ca-4858-904f-636d4f674a62" --server_type_id "s1v1m2" --networks '{\"public_ip_id\": \"03614c1b8e064540a423679dcc7fe571\", \"subnet_id\": \"e7e872f5a5b94d5a84c9539c57836fab\"}' --security_groups "e264e7a5-ec5c-44ba-ae75-fd9ea57e83a9" --keypair_name "mykey" --volumes '{\"boot_index\" : 0, \"delete_on_termination\": false, \"size\": 32, \"source_type\": \"image\", \"type\": \"SSD\"}'
+scpcli virtualserver server create --name "vm110w" --image_id "Virtual Server 생성에 사용할 운영체제의 이미지 ID 입력" --server_type_id "s1v1m2" --networks '{\"public_ip_id\": \"앞서 만든 Public IP의 ID 입력 \", \"subnet_id\": \"앞서 만든 Subnet의 ID 입력 \"}' --security_groups "앞서 만든 Serurity Group ID 입력" --keypair_name "mykey" --volumes '{\"boot_index\" : 0, \"delete_on_termination\": false, \"size\": 32, \"source_type\": \"image\", \"type\": \"SSD\"}'
 ```
 
 ## Internet Gateway Firewall 규칙 추가
@@ -142,13 +142,13 @@ scpcli virtualserver server create --name "vm110w" --image_id "28d98f66-44ca-485
 직접 설정값을 입력하여 생성
 
 ```powershell
-scpcli firewall firewall-rule create --status "ENABLE" --source_address "여기에 사용하고 있는 PC의 Public IP 입력" --service '{\"service_type\": \"TCP\", \"service_value\": \"3389\"}' --direction "INBOUND" --destination_address 10.1.1.0/24 --action "ALLOW" --firewall_id "여기에 IGW Firewall ID 입력"
+scpcli firewall firewall-rule create --status "ENABLE" --source_address "사용하고 있는 PC의 Public IP 주소 입력" --service '{\"service_type\": \"TCP\", \"service_value\": \"3389\"}' --direction "INBOUND" --destination_address 10.1.1.0/24 --action "ALLOW" --firewall_id "IGW Firewall ID 입력"
 ```
 
 ID를 조회하여 생성
 
 ```powershell
-$publicIp = "182.215.17.173";$fwId = (scpcli firewall firewall list --vpc_name VPC1 --product_type "IGW" -f json | ConvertFrom-Json).id; scpcli firewall firewall-rule create --status "ENABLE" --source_address $publicIp --service '{\"service_type\": \"TCP\", \"service_value\": \"3389\"}' --direction "INBOUND" --destination_address "10.1.1.0/24" --action "ALLOW" --firewall_id $fwId
+$publicIp = "사용하고 있는 PC의 Public IP 주소 입력";$fwId = (scpcli firewall firewall list --vpc_name VPC1 --product_type "IGW" -f json | ConvertFrom-Json).id; scpcli firewall firewall-rule create --status "ENABLE" --source_address $publicIp --service '{\"service_type\": \"TCP\", \"service_value\": \"3389\"}' --direction "INBOUND" --destination_address "10.1.1.0/24" --action "ALLOW" --firewall_id $fwId
 ```
 
 ## 리소스 정리
@@ -159,22 +159,22 @@ Open API 실습을 수행하지 않을 경우 아래의 명령을 실행하여 �
 
 ```powershell
 # 서버 삭제
-scpcli virtualserver server delete --server-id "여기에 Virtual Server의 ID 입력"
+scpcli virtualserver server delete --server-id "Virtual Server의 ID 입력"
 
 # Public IP 삭제
-scpcli vpc public-ip delete --public-ip-id "여기에 Public IP의 ID 입력"
+scpcli vpc public-ip delete --public-ip-id "Public IP의 ID 입력"
 
 # Security Group 삭제
-scpcli security-group security-group delete --security-group-id "여기에 Security Group의 ID 입력"
+scpcli security-group security-group delete --security-group-id "Security Group의 ID 입력"
 
 #Firewall 규칙 삭제
-scpcli firewall firewall-rule delete --firewall_rule_id "여기에 Firewall 규칙의 ID 입력"
+scpcli firewall firewall-rule delete --firewall_rule_id "Firewall 규칙의 ID 입력"
 
 # Subnet 삭제
-scpcli vpc subnet delete --subnet-id "여기에 Subnet ID 입력"
+scpcli vpc subnet delete --subnet-id "Subnet ID 입력"
 
 # VPC 삭제
-scpcli vpc vpc delete --vpc-id "여기에 VPC ID 입력"
+scpcli vpc vpc delete --vpc-id "VPC ID 입력"
 ```
 
 자동으로 ID를 조회하여 삭제
