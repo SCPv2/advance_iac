@@ -153,7 +153,7 @@ $publicIp = "사용하고 있는 PC의 Public IP 주소 입력";$fwId = (scpcli 
 
 ## 리소스 정리
 
-Open API 실습을 수행하지 않을 경우 아래의 명령을 실행하여 생성한 자원 삭제
+[Open API 실습](openapi.md)을 수행하지 않을 경우 아래의 명령을 실행하여 생성한 자원 삭제
 
 직접 ID를 입력하여 삭제
 
