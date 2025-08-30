@@ -42,6 +42,7 @@ Scp-ClientType:Openapi
 Accept-Language:ko-KR
 Content-Type:application/json
 ```
+
 - Body : None
 - Scripts : Pre-request
 
