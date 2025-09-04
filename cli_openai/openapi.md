@@ -6,11 +6,11 @@ Samsung Cloud Platform v2 Open API를 이용해서 [CLI 실습](./cli.md)에서 
 
 ## 사전 요구사항
 
-1. Samsung Cloud Platform [CLI 실습](./cli.md) 수행하여 리소스 생성 완료
+- Samsung Cloud Platform [CLI 실습](./cli.md) 수행하여 리소스 생성 완료
 
-2. Samsung Cloud Platform Account 인증키
+- Samsung Cloud Platform Account 인증키
 
-3. Account/User에 실습에 필요한 권한 부여 확인
+- Account/User에 실습에 필요한 권한 부여 확인
 
 ## Open API 실습 도구 설치
 

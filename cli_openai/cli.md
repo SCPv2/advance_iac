@@ -6,13 +6,13 @@ Samsung Cloud Platform v2 CLI를 이용해서 VPC 내에 Virtual Server 만들�
 
 ## 사전 요구사항
 
-1. Samsung Cloud Platform Account 인증키
+- Samsung Cloud Platform Account 인증키
 
-2. Account/User에 실습에 필요한 권한 부여 확인
+- Account/User에 실습에 필요한 권한 부여 확인
 
-3. Virtual Server Keypair
+- Virtual Server Keypair
 
-4. Samsung Cloud Platorm CLI 설치 및 구성
+- Samsung Cloud Platorm CLI 설치 및 구성
 
     - [Samsung Cloud Paltform v2 Documentation](https://docs.e.samsungsdscloud.com/clireference/cli-common/)에서 다운로드
 

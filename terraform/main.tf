@@ -18,7 +18,6 @@ module "vpc" {
 module "internet_gateway" {
   source = "./modules/internet_gateway"
   vpc_id = module.vpc.vpc_id
-  //   object_storage_bucket_id = module.object_storage.object_storage_bucket.id  
 }
 
 module "subnet" {
