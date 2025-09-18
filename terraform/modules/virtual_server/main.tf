@@ -10,6 +10,14 @@ terraform {
   required_version = ">= 1.11"
 }
 
+resource "samsungcloudplatformv2_vpc_publicip" "bastion_public_ip" {
+  type        = "IGW"
+  description = "Public IP for Bastion Server"
+  tags = {
+    name = "bastion_public_ip"
+  }
+}
+
 data "samsungcloudplatformv2_virtualserver_keypair" "keypair" {
   name = var.name_keypair
 }
@@ -25,6 +33,7 @@ resource "samsungcloudplatformv2_virtualserver_server" "server_001" {
     nic0 = {
       subnet_id    = var.subnet_id
       fixed_ip     = var.fixed_ip
+      public_ip_id = samsungcloudplatformv2_vpc_publicip.bastion_public_ip.id
     }
   }
 
@@ -39,4 +48,6 @@ resource "samsungcloudplatformv2_virtualserver_server" "server_001" {
   tags = {
     name = var.name_vm
   }
+
+  depends_on = [samsungcloudplatformv2_vpc_publicip.bastion_public_ip]
 }

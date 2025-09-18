@@ -6,7 +6,7 @@ variable "internet_gateway_id" {
 variable "vm_ip" {
   type        = string
   description = "VM IP address"
-  default     = "10.1.1.111"
+  default     = "10.1.1.110"
 }
 
 variable "my_ip" {

@@ -37,6 +37,10 @@ resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_rd
   port_range_max    = 3389
   description       = "RDP inbound from Administrator PC"
   remote_ip_prefix  = var.my_ip
+
+  depends_on = [
+    samsungcloudplatformv2_security_group_security_group_rule.bastion_ssh_in
+  ]
 }
 
 resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_http_out" {
@@ -48,6 +52,10 @@ resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_ht
   port_range_max    = 80
   description       = "HTTP outbound to Internet"
   remote_ip_prefix  = "0.0.0.0/0"
+
+  depends_on = [
+    samsungcloudplatformv2_security_group_security_group_rule.bastion_rdp_in
+  ]
 }
 
 resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_https_out" {
@@ -59,4 +67,8 @@ resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_ht
   port_range_max    = 443
   description       = "HTTPS outbound to Internet"
   remote_ip_prefix  = "0.0.0.0/0"
+
+  depends_on = [
+    samsungcloudplatformv2_security_group_security_group_rule.bastion_http_out
+  ]
 }
