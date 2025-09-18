@@ -1,9 +1,5 @@
 # Samsung Cloud Platform v2 Terraform 실습
 
-## 실습 개요
-
-TerrarSamsung Cloud Platform v2 Open API를 이용해서 템플릿에 기반한 인프라 자동 배포 실습 수행
-
 ## 사전 요구사항
 
 - Samsung Cloud Platform Account 인증키
@@ -54,4 +50,32 @@ echo }
 
 terraform version
 
+```
+
+## Terraform 기본 명령 실행
+
+```powershell
+
+terraform init
+
+terraform validate
+
+terraform plan
+```
+
+## Terraform 템플릿
+
+- main.tf
+
+- variables.tf
+
+- outputs.tf
+
+- modules/
+
+## Terraform apply 자원 배포
+
+```powershell
+
+terraform apply --auto-approve
 ```
