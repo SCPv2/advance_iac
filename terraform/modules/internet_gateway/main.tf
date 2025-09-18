@@ -8,21 +8,15 @@ terraform {
   required_version = ">= 1.11"
 }
 
-data "samsungcloudplatform_vpcs" "vpc01" {
+
+resource "samsungcloudplatformv2_vpc_internet_gateway" "IGW_vpc1" {
+  type              = var.type
+  vpc_id            = var.vpc_id
+  firewall_enabled  = true
+  firewall_loggable = false
+  tags = {
+    name = "IGW_vpc1"
+  }
 }
 
-resource "samsungcloudplatform_internet_gateway" "IGW_vpc1" {
-  igw_type = var.type
-  vpc_id   = var.vpc_id
-}
 
-data "samsungcloudplatform_internet_gateways" "IGW_vpc1" {
-  vpc_id = var.vpc_id
-}
-
-resource "samsungcloudplatform_firewall" "FW_IGW_vpc1" {
-  vpc_id = var.vpc_id
-  target_id       = samsungcloudplatform_internet_gateway.IGW_vpc01.id
-  enabled         = "true"
-  logging_enabled = "false"
-}

@@ -6,19 +6,14 @@ variable "subnet_id" {
   type = string
 }
 
-variable "regionid" {
-  type    = string
-  default = "KR-WEST-1"
-}
-
 variable "name_vm" {
   type    = string
-  default = "vm111r"
+  default = "bastionvm110r"
 }
 
 variable "name_keypair" {
   type    = string
-  default = "vm111r-key"
+  default = "mykey_e"
 }
 
 variable "security_group_id" {
@@ -31,11 +26,27 @@ variable "fixed_ip" {
   description = "Fixed IP address for VM"
 }
 
-variable "server-type" {
-  type    = string
-  default = "s1v1m2"
-}
 variable "vmstate" {
   type    = string
-  default = "RUNNING"
+  default = "ACTIVE"
+}
+
+variable "server_type_id" {
+  type    = string
+  default = "s2v1m2"
+}
+
+variable "image_id" {
+  type    = string
+  default = "253a91ea-1221-49d7-af53-a45c389e7e1a"
+}
+
+variable "boot_volume_size" {
+  type    = number
+  default = 16
+}
+
+variable "boot_volume_type" {
+  type    = string
+  default = "SSD"
 }

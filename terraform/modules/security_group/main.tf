@@ -1,53 +1,62 @@
 terraform {
   required_providers {
-    samsungcloudplatform = {
-      version = "3.12.0"
-      source  = "SamsungSDSCloud/samsungcloudplatform"
+    samsungcloudplatformv2 = {
+      version = "1.0.3"
+      source  = "SamsungSDSCloud/samsungcloudplatformv2"
     }
   }
-  required_version = ">= 0.13"
+  required_version = ">= 1.11"
 }
 
-data "samsungcloudplatform_vpcs" "vpc01" {
-}
 
-resource "samsungcloudplatform_security_group" "SGbastion" {
-  vpc_id = var.vpc_id
-  //  vpc_id  vpc_id      = data.samsungcloudplatform_vpcs.vpc01.contents[0].vpc_id
-  name        = "SGbastion"
-  is_loggable = false
-}
-
-resource "samsungcloudplatform_security_group_bulk_rule" "SGbastion_rule" {
-  security_group_id = samsungcloudplatform_security_group.SGbastion.id
-  rule {
-    direction   = "in"
-    description = "Allow inbound from Administrator PC"
-    addresses_ipv4 = [
-      var.my_ip
-    ]
-    service {
-      type  = "tcp"
-      value = "22"
-    }
-    service {
-      type  = "tcp"
-      value = "3389"
-    }
+resource "samsungcloudplatformv2_security_group_security_group" "bastionSG" {
+  name     = var.bastion_sg_name
+  loggable = false
+  tags = {
+    name = var.bastion_sg_name
   }
-  rule {
-    direction   = "out"
-    description = "Allow HTTP/HTTPS outbound to Internet"
-    addresses_ipv4 = [
-      "0.0.0.0/0"
-    ]
-    service {
-      type  = "tcp"
-      value = "80"
-    }
-    service {
-      type  = "tcp"
-      value = "443"
-    }
-  }
+}
+
+resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_ssh_in" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  security_group_id = samsungcloudplatformv2_security_group_security_group.bastionSG.id
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  description       = "SSH inbound from Administrator PC"
+  remote_ip_prefix  = var.my_ip
+}
+
+resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_rdp_in" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  security_group_id = samsungcloudplatformv2_security_group_security_group.bastionSG.id
+  protocol          = "tcp"
+  port_range_min    = 3389
+  port_range_max    = 3389
+  description       = "RDP inbound from Administrator PC"
+  remote_ip_prefix  = var.my_ip
+}
+
+resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_http_out" {
+  direction         = "egress"
+  ethertype         = "IPv4"
+  security_group_id = samsungcloudplatformv2_security_group_security_group.bastionSG.id
+  protocol          = "tcp"
+  port_range_min    = 80
+  port_range_max    = 80
+  description       = "HTTP outbound to Internet"
+  remote_ip_prefix  = "0.0.0.0/0"
+}
+
+resource "samsungcloudplatformv2_security_group_security_group_rule" "bastion_https_out" {
+  direction         = "egress"
+  ethertype         = "IPv4"
+  security_group_id = samsungcloudplatformv2_security_group_security_group.bastionSG.id
+  protocol          = "tcp"
+  port_range_min    = 443
+  port_range_max    = 443
+  description       = "HTTPS outbound to Internet"
+  remote_ip_prefix  = "0.0.0.0/0"
 }

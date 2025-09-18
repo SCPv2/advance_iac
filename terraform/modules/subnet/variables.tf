@@ -2,7 +2,6 @@ variable "vpc_id" {
   type = string
 }
 
-// Public Subnet
 variable "name_sbn01" {
   type    = string
   default = "Subnet11"
@@ -13,10 +12,9 @@ variable "cidr_sbn01" {
 }
 variable "type_sbn01" {
   type    = string
-  default = "PUBLIC"
+  default = "GENERAL"
 }
 
-// Private Subnet
 variable "name_sbn02" {
   type    = string
   default = "SBNPRI01"
@@ -27,5 +25,5 @@ variable "cidr_sbn02" {
 }
 variable "type_sbn02" {
   type    = string
-  default = "PRIVATE"
+  default = "GENERAL"
 }

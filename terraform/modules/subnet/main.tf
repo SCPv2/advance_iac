@@ -13,7 +13,10 @@ resource "samsungcloudplatformv2_vpc_subnet" "subnet01" {
   name        = var.name_sbn01
   type        = var.type_sbn01
   cidr        = var.cidr_sbn01
-  description = "Public subnet for VPC1"
+  description = "Subnet for VPC1"
+  tags = {
+    name = var.name_sbn01
+  }
 }
 
 resource "samsungcloudplatformv2_vpc_subnet" "subnet02" {
@@ -21,5 +24,8 @@ resource "samsungcloudplatformv2_vpc_subnet" "subnet02" {
   name        = var.name_sbn02
   type        = var.type_sbn02
   cidr        = var.cidr_sbn02
-  description = "Private subnet for VPC1"
+  description = "Subnet for VPC1"
+  tags = {
+    name = var.name_sbn02
+  }
 }

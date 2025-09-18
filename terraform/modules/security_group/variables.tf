@@ -1,6 +1,10 @@
-variable "my_ip" {
+variable "bastion_sg_name" {
   type    = string
-  default = "yourpublicip/32"
+  default = "bastionSG"
+}
+
+variable "my_ip" {
+  type = string
 }
 
 variable "vpc_id" {

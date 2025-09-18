@@ -29,6 +29,14 @@ module "subnet" {
 module "security_group" {
   source = "./modules/security_group"
   vpc_id = module.vpc.vpc_id
+  my_ip  = var.my_public_ip
+}
+
+module "firewall" {
+  source               = "./modules/firewall"
+  internet_gateway_id  = module.internet_gateway.igw_id
+  my_ip               = var.my_public_ip
+  depends_on          = [module.internet_gateway]
 }
 
 module "virtual_server" {
@@ -36,5 +44,5 @@ module "virtual_server" {
   vpc_id            = module.vpc.vpc_id
   security_group_id = module.security_group.security_group_id
   subnet_id         = module.subnet.subnet01_id
-  depends_on        = [module.subnet]
+  depends_on        = [module.subnet, module.firewall]
 }
