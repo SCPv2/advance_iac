@@ -73,6 +73,18 @@ terraform plan
 
 - modules/
 
+## 사용자 변수 입력
+
+- /advance_iac/terraform/variables.tf
+
+```hcl
+variable "my_public_ip" {
+  type        = string
+  description = "Your public IP address for SSH and RDP access"
+  default     = "x.x.x.x/32" # You need to replace this value to your public IP address.
+}
+```
+
 ## Terraform apply 자원 배포
 
 ```powershell

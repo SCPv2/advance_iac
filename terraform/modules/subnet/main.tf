@@ -8,24 +8,13 @@ terraform {
   required_version = ">= 1.11"
 }
 
-resource "samsungcloudplatformv2_vpc_subnet" "subnet01" {
+resource "samsungcloudplatformv2_vpc_subnet" "subnet11" {
   vpc_id      = var.vpc_id
-  name        = var.name_sbn01
-  type        = var.type_sbn01
-  cidr        = var.cidr_sbn01
-  description = "Subnet for VPC1"
+  name        = var.name
+  type        = var.type
+  cidr        = var.cidr
+  description = "${var.name} created by Terraform"
   tags = {
-    name = var.name_sbn01
-  }
-}
-
-resource "samsungcloudplatformv2_vpc_subnet" "subnet02" {
-  vpc_id      = var.vpc_id
-  name        = var.name_sbn02
-  type        = var.type_sbn02
-  cidr        = var.cidr_sbn02
-  description = "Subnet for VPC1"
-  tags = {
-    name = var.name_sbn02
+    name = var.name
   }
 }

@@ -43,6 +43,6 @@ module "virtual_server" {
   source            = "./modules/virtual_server"
   vpc_id            = module.vpc.vpc_id
   security_group_id = module.security_group.security_group_id
-  subnet_id         = module.subnet.subnet01_id
+  subnet_id         = module.subnet.subnet11_id
   depends_on        = [module.subnet, module.firewall]
 }

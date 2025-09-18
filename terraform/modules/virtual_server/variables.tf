@@ -22,7 +22,7 @@ variable "security_group_id" {
 
 variable "fixed_ip" {
   type        = string
-  default     = "10.1.1.111"
+  default     = "10.1.1.110"
   description = "Fixed IP address for VM"
 }
 
@@ -38,7 +38,8 @@ variable "server_type_id" {
 
 variable "image_id" {
   type    = string
-  default = "253a91ea-1221-49d7-af53-a45c389e7e1a"
+#  default = "253a91ea-1221-49d7-af53-a45c389e7e1a"
+  default = "99b329ad-14e1-4741-b3ef-2a330ef81074"  
 }
 
 variable "boot_volume_size" {

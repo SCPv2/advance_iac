@@ -1,3 +1,3 @@
 output "virtual_server_id" {
-  value = samsungcloudplatform_virtual_server.server_001.id
+  value = samsungcloudplatformv2_virtualserver_server.server_001.id
 }

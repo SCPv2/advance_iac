@@ -1,29 +1,22 @@
 variable "vpc_id" {
-  type = string
+  type        = string
+  description = "VPC ID"
 }
 
-variable "name_sbn01" {
-  type    = string
-  default = "Subnet11"
-}
-variable "cidr_sbn01" {
-  type    = string
-  default = "10.1.1.0/24"
-}
-variable "type_sbn01" {
-  type    = string
-  default = "GENERAL"
+variable "name" {
+  type        = string
+  default     = "Subnet11"
+  description = "Subnet name"
 }
 
-variable "name_sbn02" {
-  type    = string
-  default = "SBNPRI01"
+variable "cidr" {
+  type        = string
+  default     = "10.1.1.0/24"
+  description = "Subnet CIDR block"
 }
-variable "cidr_sbn02" {
-  type    = string
-  default = "10.1.2.0/24"
-}
-variable "type_sbn02" {
-  type    = string
-  default = "GENERAL"
+
+variable "type" {
+  type        = string
+  default     = "GENERAL"
+  description = "Subnet for bastion"
 }

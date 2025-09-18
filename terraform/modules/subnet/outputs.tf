@@ -1,6 +1,3 @@
-output "subnet01_id" {
-  value = samsungcloudplatform_subnet.subnet01.id
-}
-output "subnet02_id" {
-  value = samsungcloudplatform_subnet.subnet02.id
+output "subnet11_id" {
+  value = samsungcloudplatformv2_vpc_subnet.subnet11.id
 }

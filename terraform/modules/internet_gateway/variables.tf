@@ -4,5 +4,5 @@ variable "vpc_id" {
 
 variable "type" {
   type    = string
-  default = "SHARED"
+  default = "IGW"
 }

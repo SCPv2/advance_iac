@@ -1,3 +1,3 @@
 output "vpc_id" {
-  value = samsungcloudplatform_vpc.vpc1.id
+  value = samsungcloudplatformv2_vpc_vpc.vpc1.id
 }
