@@ -14,11 +14,11 @@ Samsung Cloud Platform v2 CLI를 이용해서 VPC 내에 Virtual Server 만들�
 
 - Samsung Cloud Platorm CLI 설치 및 구성
 
-    - [Samsung Cloud Paltform v2 Documentation](https://docs.e.samsungsdscloud.com/clireference/cli-common/)에서 다운로드
+  - [Samsung Cloud Paltform v2 Documentation](https://docs.e.samsungsdscloud.com/clireference/cli-common/)에서 다운로드
 
-    - 작업 폴더에 scp-cli.exe 를 이동하고 이름을 scpcli.exe로 변경
-    - 환경변수 PATH에 작업 폴더 경로를 등록한 후 Windows 재부팅
-    - cli-config.json 파일 생성(인증키 정보 입력 필요)
+  - 작업 폴더에 scp-cli.exe 를 이동하고 이름을 scpcli.exe로 변경
+  - 환경변수 PATH에 작업 폴더 경로를 등록한 후 Windows 재부팅
+  - cli-config.json 파일 생성(인증키 정보 입력 필요)
 
 ```cmd
 cd %USERPROFILE%
@@ -134,7 +134,7 @@ scpcli vpc public-ip create --type "IGW"
 - Virtual Server 생성
 
 ```powershell
-scpcli virtualserver server create --name "vm110w" --image_id "Virtual Server 생성에 사용할 운영체제의 이미지 ID 입력" --server_type_id "s1v1m2" --networks '{\"public_ip_id\": \"앞서 만든 Public IP의 ID 입력 \", \"subnet_id\": \"앞서 만든 Subnet의 ID 입력 \"}' --security_groups "앞서 만든 Serurity Group ID 입력" --keypair_name "mykey" --volumes '{\"boot_index\" : 0, \"delete_on_termination\": false, \"size\": 32, \"source_type\": \"image\", \"type\": \"SSD\"}'
+scpcli virtualserver server create --name "vm110w" --image_id "Virtual Server 생성에 사용할 운영체제의 이미지 ID 입력" --server_type_id "s2v1m2" --networks '{\"public_ip_id\": \"앞서 만든 Public IP의 ID 입력 \", \"subnet_id\": \"앞서 만든 Subnet의 ID 입력 \"}' --security_groups "앞서 만든 Serurity Group ID 입력" --keypair_name "mykey" --volumes '{\"boot_index\" : 0, \"delete_on_termination\": false, \"size\": 32, \"source_type\": \"image\", \"type\": \"SSD\"}'
 ```
 
 ## Internet Gateway Firewall 규칙 추가
