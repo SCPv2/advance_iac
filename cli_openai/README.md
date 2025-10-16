@@ -1,4 +1,4 @@
-# Samsung Cloud Platform v2 CLI & OpenAPI
+# Samsung Cloud Platform v2 Advance CLI & OpenAPI 실
 
 ## Lab Environment
 
