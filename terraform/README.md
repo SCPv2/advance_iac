@@ -1,4 +1,4 @@
-# Samsung Cloud Platform v2 Terraform 실습
+# Samsung Cloud Platform v2 Advance Terraform 실습
 
 ## 사전 요구사항
 
