@@ -1,4 +1,4 @@
-# Samsung Cloud Platform v2 Advance Terraform 실습
+# Terraform을 통한 인프라 운영 자동화
 
 ## 사전 요구사항
 
